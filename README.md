@@ -1,2 +1,2 @@
-# portfolio
-Susan's portfolio
+# Portfolio
+Susan Qu's projects directory site! 
