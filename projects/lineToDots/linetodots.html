@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>lineTo Dots</title> 
+
+<link rel="title icon" href="sq.ico" type="titleicon" />
+<link rel="author" href="https://plus.google.com/u/0/+SusanQu/" />
+
+<!-- for Google -->
+<meta name="author" content="Susan Qu" />
+<meta name="description" content="Describe App" />
+<meta name="keywords" content="interactive, drawing, lines" />    
+<meta name="copyright" content="Susan Qu" />
+
+<!-- for Facebook -->          
+<meta property="og:title" content="App Title" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="url_to-image_for_facebook" />
+<meta property="og:url" content="url_of_app" />
+<meta property="og:description" content="Describe App - shows in share" />
+
+<!-- for Twitter -->          
+<meta name="twitter:card" content="summary" /> <!-- do not edit this line (must say "summary") -->
+<meta name="twitter:title" content="App Title" />
+<meta name="twitter:description" content="Describe App - shows on Twitter" />
+<meta name="twitter:image" content="url_to-image" />
+
+<!-- for Apple -->
+<!-- found user-scalable=no worked best for full screen auto scaling -->
+<!-- <meta name="viewport" content="user-scalable=no, minimal-ui" /> -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="apple-touch-icon-precomposed" href="url_to_icon_57x57" />
+
+<script>var zon = true; // true for comments from zim code</script>
+<script src="http://d309knd7es5f10.cloudfront.net/zim_1.3.js"></script>
+<style>
+	body {margin:0px; padding:0px; background-color:#000;}
+	#myCanvas {position:absolute; background-color:#FFF;}
+	#myExtra {position:absolute; display:none; z-index:2;}
+	#instruction{
+		font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: lighter;
+		line-height: 20px;
+		color: #777777;
+		z-index: 1;
+
+		position: relative;
+		float: right;
+		margin: 1em;
+	}
+</style>
+
+<script src="http://code.createjs.com/createjs-2014.12.12.min.js"></script>
+<script src = "lines-2.0.js"></script>
+
+<script>
+var scaling = "full"; 
+var stageW = 500; // ignored if scaling is full
+var stageH = 500;
+var largest; // automatically set
+var appOrientation; // watch out - orientation keyword is used by apple - sigh
+var lastOrientation; // used to detect orientation change
+var cjs = createjs; // shorter namespace if desired
+var stage;
+var preload;
+var progress;
+var appReady = false; 
+
+window.addEventListener('load', init);
+if (scaling != "none") window.addEventListener('resize', sizeCanvas);
+
+function init() {
+
+	setTimeout(function() {window.scrollTo(0, 1);}, 100); 
+	
+	if (scaling != "none") sizeCanvas();
+	if (scaling == "full") zil(); // keep canvas still (from arrows, scrollwheel, etc.)
+	stage = new createjs.Stage("myCanvas"); 
+	stage.setBounds(0, 0, stageW, stageH);
+	stage.enableMouseOver(10); // if you need mouse rollover
+	createjs.Touch.enable(stage,true); // added for mobile	
+	
+	makeProgress();
+	drawlines(); 
+
+
+}
+
+function makeProgress() {
+	
+	progress = new createjs.Container();
+	stage.addChild(progress);
+	stage.update();
+	
+}
+
+// ------------------   END TOP TEMPLATE  ------------------ 
+
+// ------------------      START APP      ------------------ 
+
+function drawlines() {
+
+	var stroke = new lines.Stroke(null, 50, null, 0.05);
+
+	window.addEventListener("click", function(){
+		shape.Dot(10, null, null);
+	});
+	
+	
+	window.addEventListener("keydown", function(e){
+
+		if (!e) e = event;
+		if(e.keyCode == 32){
+			stroke.enabled = !stroke.enabled;
+			console.log("enabled" + stroke.enabled);
+		}
+
+	});
+
+	stage.update();
+
+	if (scaling=="full") {
+		appReady = true;
+		fullResize();
+	} else {
+		stage.update();
+	}
+}
+
+
+function fullResize() { 
+
+	if (!appReady) return;	
+	
+	if (appOrientation != lastOrientation) { // new orientation
+		lastOrientation = appOrientation;
+		if (appOrientation == "horizontal") {
+			// disable and enable appropriate pages and layoutManager
+		} else {
+			// disable and enable appropriate pages and layoutManager
+		}
+	} else { // just a size change
+		if (appOrientation == "horizontal") {
+			// resize appropriate layoutManager			
+		} else {
+			// resize appropriate layoutManager			
+		}
+	}	
+	if (appOrientation == "horizontal") {
+		// resize appropriate pages
+	} else {
+		// resize appropriate pages		
+	}	
+	
+	if (stage) stage.update();
+}
+
+
+// ------------------       END APP      ------------------ 
+
+
+
+// ------------------   BOTTOM TEMPLATE  ------------------ 
+
+function sizeCanvas() {
+	
+	var can = zid("myCanvas");	
+	var w = window.innerWidth;
+	var h = window.innerHeight; 	
+	var newH; 
+	var newW;	
+	
+	appOrientation = (w > h) ? "horizontal" : "vertical";
+
+	if (scaling == "fit") { 
+		// scales canvas to fit dimensions inside screen
+		if (w/h >= stageW/stageH) {
+			newH = h;
+			newW = newH*stageW/stageH;	
+		} else {
+			newW = w;
+			newH = newW*stageH/stageW;
+		}
+	} else if (scaling == "outside") { 
+		// scales canvas so screen inside dimensions
+		document.body.style.overflow = "hidden";
+		if (w/h >= stageW/stageH) {
+			newW = w;
+			newH = newW*stageH/stageW;	
+		} else {
+			newH = h;
+			newW = newH*stageW/stageH;			
+		}		
+	} else if (scaling == "full") { 
+		// does not scale canvas but sets width and height to screen
+		document.body.style.overflow = "hidden";
+		can.style.left = can.style.top = "0px";		
+		stageW = w;
+		stageH = h;			
+		if (stage) stage.setBounds(0,0,stageW,stageH);
+		fullResize();
+		return;
+	}
+	
+	can.style.width = newW + "px";
+	can.style.height = newH + "px"; 
+	
+	// horizontal center
+	can.style.left = ((w-newW)/2) + "px";
+	
+	// vertical center
+	can.style.top = ((h-newH)/2) + "px";
+	
+}
+
+
+function makeCanvas() {
+
+		
+	var canvas = document.createElement("canvas");
+	canvas.setAttribute("id", "myCanvas");
+	largest = Math.max(window.innerWidth, screen.width, window.innerHeight, screen.height);
+	if (scaling == "full") {		
+		canvas.setAttribute("width", largest);
+		canvas.setAttribute("height", largest); 
+	} else {
+		canvas.setAttribute("width", stageW);
+		canvas.setAttribute("height", stageH);		
+	}		
+	document.body.appendChild(canvas);
+}
+
+</script>
+
+
+</head>
+
+<body>
+	<script>makeCanvas();</script>
+	<div id="myExtra">
+		<input type="text" width="400" id="fieldID" />
+	</div>
+	<p id="instruction">
+		press space to pause<br>
+		left click to draw dots
+	</p>
+
+
+</body>
+
+</html>
