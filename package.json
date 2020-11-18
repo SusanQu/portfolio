@@ -1,0 +1,24 @@
+{
+  "name": "sass-compile",
+  "version": "1.0.0",
+  "description": "Susan Qu's projects directory site!",
+  "main": "index.html",
+  "dependencies": {
+    "node-sass": "^5.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scss": "node-sass --watch assets/sass -o assets/css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SusanQu/susanqu.github.io.git"
+  },
+  "author": "Susan Qu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SusanQu/susanqu.github.io/issues"
+  },
+  "homepage": "https://github.com/SusanQu/susanqu.github.io#readme"
+}
